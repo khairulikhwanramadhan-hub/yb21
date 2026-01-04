@@ -2,20 +2,25 @@ const fs = require("fs");
 const path = require("path");
 
 module.exports = (req, res) => {
-  try {
-    const filePath = path.join(process.cwd(), "data.json");
-    const raw = fs.readFileSync(filePath, "utf-8");
-    const data = JSON.parse(raw);
+  const page = parseInt(req.query.page || "1");
+  const limit = parseInt(req.query.limit || "24");
+  const search = (req.query.search || "").toLowerCase();
 
-    res.status(200).json({
-      success: true,
-      total: data.length,
-      data
-    });
-  } catch (e) {
-    res.status(500).json({
-      success: false,
-      error: e.message
-    });
+  const file = path.join(process.cwd(), "data.json");
+  const raw = JSON.parse(fs.readFileSync(file, "utf-8"));
+
+  let data = raw;
+  if (search) {
+    data = data.filter(i => i.title.toLowerCase().includes(search));
   }
+
+  const start = (page - 1) * limit;
+  const sliced = data.slice(start, start + limit);
+
+  res.json({
+    page,
+    limit,
+    total: data.length,
+    data: sliced
+  });
 };

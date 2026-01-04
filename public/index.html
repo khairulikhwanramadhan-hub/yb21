@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>YB21+</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{margin:0;background:#020617;color:white;font-family:system-ui}
+header{padding:16px;display:flex;justify-content:space-between;align-items:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;padding:16px}
+.card{background:#0f172a;border-radius:12px;padding:12px;cursor:pointer;transition:.2s}
+.card:hover{transform:scale(1.03)}
+input{background:#020617;border:1px solid #1e293b;color:white;padding:8px;border-radius:8px}
+</style>
+</head>
+<body>
+
+<header>
+  <b>YB21+</b>
+  <input id="q" placeholder="Cari...">
+</header>
+
+<div id="grid" class="grid"></div>
+
+<script>
+let page=1, q="";
+const grid=document.getElementById("grid");
+
+async function load(reset=false){
+  if(reset){page=1;grid.innerHTML="";}
+  const r=await fetch(`/api/list?page=${page}&search=${q}`);
+  const j=await r.json();
+  j.data.forEach(i=>{
+    const d=document.createElement("div");
+    d.className="card";
+    d.textContent=i.title;
+    d.onclick=()=>location.href="/watch.html?id="+i.id;
+    grid.appendChild(d);
+  });
+  page++;
+}
+
+document.getElementById("q").oninput=e=>{
+  q=e.target.value.toLowerCase();
+  load(true);
+};
+
+window.onscroll=()=>{
+  if(innerHeight+scrollY>=document.body.offsetHeight-300){
+    load();
+  }
+};
+
+load();
+</script>
+</body>
+</html>
