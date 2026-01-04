@@ -1,0 +1,26 @@
+<header class="nav">
+  <div class="logo">YB21+</div>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/genre.html">Genre</a>
+  </nav>
+  <input id="q" placeholder="Search...">
+</header>
+
+<style>
+.nav{display:flex;justify-content:space-between;align-items:center;
+background:#020617;padding:14px;position:sticky;top:0}
+.nav a{color:#94a3b8;margin-right:12px;text-decoration:none}
+.nav a:hover{color:white}
+.logo{font-weight:bold}
+input{background:#020617;border:1px solid #1e293b;color:white;
+padding:6px 10px;border-radius:6px}
+</style>
+
+<script>
+document.getElementById("q").addEventListener("keypress",e=>{
+  if(e.key==="Enter"){
+    location.href="/search.html?q="+encodeURIComponent(e.target.value);
+  }
+});
+</script>

@@ -5,25 +5,23 @@
 <title>Watch</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-body{margin:0;background:#020617;color:white;font-family:system-ui;padding:20px}
+body{margin:0;background:#020617;color:white;font-family:system-ui;padding:16px}
+iframe{width:100%;height:220px;border:0}
 a{color:#22c55e;text-decoration:none}
 </style>
 </head>
 <body>
-
 <a href="/">← Back</a>
-<h2 id="title"></h2>
+<h2 id="title">Loading...</h2>
+<iframe id="player" allowfullscreen></iframe>
 <p id="desc"></p>
-
 <script>
 const id=new URLSearchParams(location.search).get("id");
-fetch("/api/detail?id="+id)
-.then(r=>r.json())
-.then(d=>{
-  document.getElementById("title").innerText=d.title;
-  document.getElementById("desc").innerText=d.description;
+fetch("/api/detail?id="+id).then(r=>r.json()).then(d=>{
+  document.getElementById("title").innerText=d.title||"";
+  document.getElementById("desc").innerText=d.description||"";
+  if(d.iframe){document.getElementById("player").src=d.iframe;}
 });
 </script>
-
 </body>
 </html>

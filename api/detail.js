@@ -10,7 +10,6 @@ module.exports = async (req, res) => {
   const file = path.join(process.cwd(), "data.json");
   const list = JSON.parse(fs.readFileSync(file, "utf-8"));
   const item = list.find(i => i.id === id);
-
   if (!item) return res.status(404).json({ error: "not found" });
 
   const { data } = await axios.get(item.link, {
@@ -18,10 +17,11 @@ module.exports = async (req, res) => {
   });
 
   const $ = cheerio.load(data);
-  const desc = $("meta[name='description']").attr("content") || "";
-
   res.json({
     title: item.title,
-    description: desc
+    description: $("meta[name='description']").attr("content") || "",
+    poster: $("meta[property='og:image']").attr("content") || "",
+    genre: $("a[href*='/genre/']").first().text() || "general",
+    iframe: $("iframe").attr("src") || null
   });
 };

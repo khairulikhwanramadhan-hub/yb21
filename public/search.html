@@ -1,24 +1,22 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>YB21+</title>
+<title>Search</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="manifest" href="/manifest.json">
 <style>
 body{margin:0;background:#020617;color:white;font-family:system-ui}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;padding:16px}
-.card{background:#0f172a;border-radius:12px;padding:12px;cursor:pointer;transition:.2s}
-.card:hover{transform:scale(1.03)}
+.card{background:#0f172a;border-radius:12px;padding:12px;cursor:pointer}
 </style>
 </head>
 <body>
 <div id="nav"></div>
 <div id="grid" class="grid"></div>
-
 <script>
 fetch("/_nav.html").then(r=>r.text()).then(t=>nav.innerHTML=t);
-fetch("/api/list?page=1&limit=48")
+const q=new URLSearchParams(location.search).get("q")||"";
+fetch("/api/list?search="+encodeURIComponent(q))
 .then(r=>r.json())
 .then(j=>{
   j.data.forEach(i=>{
@@ -29,7 +27,6 @@ fetch("/api/list?page=1&limit=48")
     grid.appendChild(d);
   });
 });
-if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}
 </script>
 </body>
 </html>

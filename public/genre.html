@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Genre</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{margin:0;background:#020617;color:white;font-family:system-ui}
+a{display:block;padding:10px;color:#94a3b8;text-decoration:none}
+a:hover{color:white}
+</style>
+</head>
+<body>
+<div id="nav"></div>
+<div id="list"></div>
+<script>
+fetch("/_nav.html").then(r=>r.text()).then(t=>nav.innerHTML=t);
+fetch("/api/genres").then(r=>r.json()).then(gs=>{
+  gs.forEach(g=>{
+    const a=document.createElement("a");
+    a.href="/?genre="+g;
+    a.textContent=g;
+    list.appendChild(a);
+  });
+});
+</script>
+</body>
+</html>
